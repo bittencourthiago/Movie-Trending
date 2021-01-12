@@ -22,8 +22,16 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         filmesCollectionView.dataSource = self
         filmesCollectionView.delegate = self
         
+        self.setNeedsStatusBarAppearanceUpdate()
+        
         recuperaImages()
     }
+    
+    //Definindo a barra de status como branca
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     // MARK: - Collection data source
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

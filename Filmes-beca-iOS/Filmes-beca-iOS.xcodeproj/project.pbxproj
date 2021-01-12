@@ -75,6 +75,14 @@
 			path = assets;
 			sourceTree = "<group>";
 		};
+		F06ADFAE25ADCE3C0071C531 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F08026A325A737DD00C41194 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		F080269025A737DA00C41194 = {
 			isa = PBXGroup;
 			children = (
@@ -101,7 +109,7 @@
 				F08026B025A737F800C41194 /* Controller */,
 				F08026AF25A737F300C41194 /* View */,
 				F08026AE25A737EE00C41194 /* Model */,
-				F08026A325A737DD00C41194 /* Assets.xcassets */,
+				F06ADFAE25ADCE3C0071C531 /* Resources */,
 				F08026A525A737DD00C41194 /* LaunchScreen.storyboard */,
 				F08026A825A737DD00C41194 /* Info.plist */,
 			);
