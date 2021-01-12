@@ -17,12 +17,15 @@ class DetalhesFilmeViewController: UIViewController {
     @IBOutlet weak var sinopseTextLabel: UILabel!
     @IBOutlet weak var lancamentoTextLabel: UILabel!
     
-    // MARK: - Variáveis
+    // MARK: - Variables
+    
     let filmesAPI = FilmesRequisition()
     
     var filmeSelecionado:[String:Any]? = nil
     
     var paginaAtual:Int = 1
+    
+    // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,22 +33,30 @@ class DetalhesFilmeViewController: UIViewController {
         showFilme()
     }
     
+    // MARK: - IBActions
+    
+    @IBAction func botaoVoltar(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: - Methods
+    
     func showFilme() {
         
-        guard let filme = filmeSelecionado as? [String:Any] else { return }
+        guard let filme = filmeSelecionado else { return }
         guard let idFilmeSelecionado = filme["id"] as? Int else { return }
         guard let imagemFilmeSelecionado = filme["imagem"] as? UIImage else { return }
         
         filmesAPI.pegarDetalhesPelo(id: idFilmeSelecionado, pagina: paginaAtual) { (filme) in
             
-            var filmeAtual = filme[0]
+            let filmeAtual = filme[0]
             guard let nome = filmeAtual["nome"]  as? String else { return }
             guard let sinopse = filmeAtual["sinopse"]  as? String else { return }
             guard let lancamento = filmeAtual["lancamento"]  as? String else { return }
             
-            var lancamentoArr:[String] = lancamento.components(separatedBy: "-")
+            let lancamentoArr:[String] = lancamento.components(separatedBy: "-")
             
-            var lancamentoLapidado = "\(lancamentoArr[2])/\(lancamentoArr[1])/\(lancamentoArr[0])"
+            let lancamentoLapidado = "\(lancamentoArr[2])/\(lancamentoArr[1])/\(lancamentoArr[0])"
             
             self.tituloTextLabel.text = nome
             self.imagemFilme.image = imagemFilmeSelecionado
@@ -54,9 +65,4 @@ class DetalhesFilmeViewController: UIViewController {
             
         }
     }
-    
-    @IBAction func botaoVoltar(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
 }

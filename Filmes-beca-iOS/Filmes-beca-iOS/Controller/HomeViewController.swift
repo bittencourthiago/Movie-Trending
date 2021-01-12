@@ -10,12 +10,18 @@ import UIKit
 
 class HomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
+    // MARK: - Outlets
+    
     @IBOutlet weak var filmesCollectionView: UICollectionView!
+    
+    // MARK: - Variables
     
     let filmesAPI = FilmesRequisition()
     var filmesToShow:[[String:Any]] = [[:]]
     var paginaAtual:Int = 1
     var carregamento = SpinerViewController()
+    
+    // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,12 +33,13 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         recuperaImages()
     }
     
-    //Definindo a barra de status como branca
+    // MARK: - StatusBar
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     
-    // MARK: - Collection data source
+    // MARK: - CollectionView data source
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filmesToShow.count
@@ -46,8 +53,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         guard let imagem = filmeAtual["imagem"] as? UIImage else { return celulaFilme }
         guard let titulo = filmeAtual["nome"] as? String else { return celulaFilme }
         
-        celulaFilme.imagemFilme.image = imagem
-        
+        celulaFilme.imagemFilme.image = imagem   
         
         celulaFilme.tituloFilme.text = titulo
         
@@ -64,7 +70,36 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         self.present(controller, animated: true, completion: nil)
         
     }
+    
+    // MARK: - IBActions
 
+    @IBAction func carregaPaginaAnterior(_ sender: UIButton) {
+        if(paginaAtual != 1) {
+            paginaAtual = paginaAtual - 1
+            
+            recuperaImages()
+        } else {
+            print("Voce esta na primeira página")
+        }
+    }
+   
+    @IBAction func botaoProximaPagina(_ sender: UIButton) {
+        carregamento.showSpinner(onView: self.view)
+        paginaAtual = paginaAtual + 1
+        
+        filmesAPI.getImagens(paginaAtual) { (filme, filmesArray ) in
+            
+            self.filmesToShow = filme
+            if(self.filmesToShow.count == filmesArray?.count ) {
+                self.filmesToShow.remove(at: 0)
+                self.filmesCollectionView.reloadData()
+                self.carregamento.removeSpinner()
+            }
+        }
+    }
+    
+    // MARK: - Methods
+    
     func recuperaImages() {
         
         //animação de carregamento enquanto espera a requisição
@@ -78,35 +113,5 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
                 self.filmesCollectionView.reloadData()
             }
         }
-        
-    }
-    @IBAction func carregaPaginaAnterior(_ sender: UIButton) {
-        if(paginaAtual != 1) {
-            paginaAtual = paginaAtual - 1
-            
-            recuperaImages()
-        } else {
-            print("Voce esta na primeira página")
-        }
-        
-    }
-   
-    @IBAction func botaoProximaPagina(_ sender: UIButton) {
-        carregamento.showSpinner(onView: self.view)
-        paginaAtual = paginaAtual + 1
-        print(paginaAtual)
-        
-        filmesAPI.getImagens(paginaAtual) { (filme, filmesArray ) in
-            
-            self.filmesToShow = filme
-            if(self.filmesToShow.count == filmesArray?.count ) {
-                self.filmesToShow.remove(at: 0)
-                self.filmesCollectionView.reloadData()
-                self.carregamento.removeSpinner()
-            }
-            
-            
-        }
-        
     }
 }

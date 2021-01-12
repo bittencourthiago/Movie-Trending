@@ -13,8 +13,12 @@ import CoreData
 
 class FilmesRequisition: NSObject {
     
+    // MARK: - Variables
+    
     var filmes:[String:Any] = [:]
 
+    // MARK: - Methods
+    
     func getFilmes(_ pagina:Int=1, completion:@escaping(_ filmes:[[String:Any]]) -> Void ) {
         
         let myKey = "122c287761eefdfe3d8bcc0154354e73"
@@ -54,6 +58,7 @@ class FilmesRequisition: NSObject {
                             guard let caminhoAtual = filme["poster_path"] else { return }
                             guard let sinopseAtual = filme["overview"] else { return }
                             guard let dataDeLancamento = filme[lancaOuEstreia] else { return }
+                            
                             filmeAtual = [
                                 "id":id,
                                 "nome":nomeAtual,
