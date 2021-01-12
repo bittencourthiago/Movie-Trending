@@ -17,7 +17,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     // MARK: - Variables
     
     let filmesAPI = FilmesRequisition()
-    var filmesToShow:[[String:Any]] = [[:]]
+    var filmesToShow:[Filme] = []
     var paginaAtual:Int = 1
     var carregamento = SpinerViewController()
     
@@ -50,12 +50,11 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
         let filmeAtual = filmesToShow[indexPath.item]
         
-        guard let imagem = filmeAtual["imagem"] as? UIImage else { return celulaFilme }
-        guard let titulo = filmeAtual["nome"] as? String else { return celulaFilme }
+        guard let imagem = filmeAtual.imagem else { return celulaFilme }
         
         celulaFilme.imagemFilme.image = imagem   
         
-        celulaFilme.tituloFilme.text = titulo
+        celulaFilme.tituloFilme.text = filmeAtual.nome
         
         return celulaFilme
     }

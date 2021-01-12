@@ -15,11 +15,11 @@ class FilmesRequisition: NSObject {
     
     // MARK: - Variables
     
-    var filmes:[String:Any] = [:]
+    var filmes:[Filme]? = []
 
     // MARK: - Methods
     
-    func getFilmes(_ pagina:Int=1, completion:@escaping(_ filmes:[[String:Any]]) -> Void ) {
+    func getFilmes(_ pagina:Int=1, completion:@escaping(_ filmes:[Filme]) -> Void ) {
         
         let myKey = "122c287761eefdfe3d8bcc0154354e73"
         
@@ -30,10 +30,9 @@ class FilmesRequisition: NSObject {
                 case .success:
                     if let resposta = response.result.value as? [String:Any] {
                         
-                        var filmeAtual:[String:Any] = [:]
                         var tituloOuNome = ""
                         var lancaOuEstreia = ""
-                        var filmesBruto:[[String:Any]] = [[:]]
+                        var filmesBruto:[Filme] = []
                         
                         guard let filmes = resposta["results"] as? [[String:Any]] else { return }
                         
@@ -53,20 +52,23 @@ class FilmesRequisition: NSObject {
                                 lancaOuEstreia = "first_air_date"
                             }
                                   
-                            guard let id = filme["id"] else { return }
-                            guard let nomeAtual = filme[tituloOuNome] else { return }
-                            guard let caminhoAtual = filme["poster_path"] else { return }
-                            guard let sinopseAtual = filme["overview"] else { return }
-                            guard let dataDeLancamento = filme[lancaOuEstreia] else { return }
+                            guard let id = filme["id"] as? Int else { return }
+                            guard let nomeAtual = filme[tituloOuNome] as? String else { return }
+                            guard let caminhoAtual = filme["poster_path"] as? String else { return }
+                            guard let sinopseAtual = filme["overview"] as? String else { return }
+                            guard let dataDeLancamento = filme[lancaOuEstreia] as? String else { return }
+  
+                            let filmeAtual = Filme(nome: nomeAtual, id: id, caminho: caminhoAtual, sinopse: sinopseAtual, lancamento: dataDeLancamento, imagem: nil)
                             
-                            filmeAtual = [
-                                "id":id,
-                                "nome":nomeAtual,
-                                "caminho":caminhoAtual,
-                                "sinopse":sinopseAtual,
-                                "lancamento":dataDeLancamento
-                                
-                            ]
+//                            filmeAtual = [
+//                                "id":id,
+//                                "nome":nomeAtual,
+//                                "caminho":caminhoAtual,
+//                                "sinopse":sinopseAtual,
+//                                "lancamento":dataDeLancamento
+//
+//                            ]
+                            
                             
                             filmesBruto.append(filmeAtual)
                         }
@@ -79,22 +81,17 @@ class FilmesRequisition: NSObject {
             }
         }
     }
-    func getImagens(_ pagina:Int=1, completion: @escaping(_ filme: [[String:Any]], _ filmes: [[String:Any]]?) ->Void) {
+    func getImagens(_ pagina:Int=1, completion: @escaping(_ filme: [Filme], _ filmes: [Filme]?) ->Void) {
         
         getFilmes(pagina) { (filmes) in
             
-            var filmesProntos:[[String:Any]] = [[:]]
+            var filmesProntos:[Filme] = []
             
             for filme in filmes {
-                
-                if let filmeCaminho = filme["caminho"] as? String {
-                
-                    guard let nome = filme["nome"] else { return }
-                    guard let id = filme["id"] else { return }
+      
+                guard let url = URL(string: "https://image.tmdb.org/t/p/w500\(String(describing: filme.caminho))") else { return }
                     
-                    guard let url = URL(string: "https://image.tmdb.org/t/p/w500\(filmeCaminho)") else { return }
-                    
-                    var filmeAtual:[String:Any] = [:]
+                    var filmeAtual:Filme? = nil
                     
                     Alamofire.request(url, method: .get).responseImage(completionHandler: { (response) in
                         switch response.result {
@@ -102,13 +99,17 @@ class FilmesRequisition: NSObject {
                                 
                                 if let image = response.result.value {
                                     
-                                    filmeAtual = [
-                                        "nome":nome,
-                                        "imagem":image,
-                                        "id":id
-                                    ]
+                                    filmeAtual = Filme(nome: filme.nome, id: filme.id,caminho: filme.caminho , sinopse: filme.sinopse, lancamento: filme.lancamento, imagem: image)
+                                 
+//                                    filmeAtual = [
+//                                        "nome":filme.nome,
+//                                        "imagem":image,
+//                                        "id":filme.id
+//                                    ]
                                     
-                                    filmesProntos.append(filmeAtual)
+                                    guard let `filmeAtual` = filmeAtual else { return }
+                                    
+                                    filmesProntos.append( filmeAtual)
                                     completion(filmesProntos, filmes)
                                 }
                                 
@@ -119,18 +120,15 @@ class FilmesRequisition: NSObject {
                                 break
                         }
                     })
-                }
             }
         }
     }
-    func pegarDetalhesPelo(id:Int, pagina:Int,completion: @escaping(_ filme:[[String:Any]]) -> Void)  {
+    func pegarDetalhesPelo(id:Int, pagina:Int,completion: @escaping(_ filme:[Filme]) -> Void)  {
         getFilmes(pagina) { (filmes) in
             
             let filmeSelecionado = filmes.filter({ filmeAtual in
-                
-                guard let filme = filmeAtual["id"] as? Int else { return false }
-                
-                return filme == id
+
+                return filmeAtual.id == id
                 
             })
             completion(filmeSelecionado)
