@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class HomeViewController: UIViewController, UICollectionViewDelegate {
     
     // MARK: - Outlets
     
@@ -16,10 +16,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     // MARK: - Variables
     
-    let filmesAPI = FilmesRequisition()
-    var filmesToShow:[Filme] = []
-    var paginaAtual:Int = 1
-    var carregamento = SpinerViewController()
+    let viewModel = HomeViewModel()
     
     // MARK: - Life Cycle
     
@@ -30,7 +27,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         
         self.setNeedsStatusBarAppearanceUpdate()
         
-        recuperaImages()
+        carregaFilmes()
     }
     
     // MARK: - StatusBar
@@ -39,78 +36,58 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         return .lightContent
     }
     
+    // MARK: - IBActions
+
+    @IBAction func carregaPaginaAnterior(_ sender: UIButton) {
+            
+        viewModel.carregaImagens(self, collectionView: filmesCollectionView, valueToAddOnPage: -1)
+    }
+   
+    @IBAction func botaoProximaPagina(_ sender: UIButton) {
+        
+        viewModel.carregaImagens(self, collectionView: filmesCollectionView, valueToAddOnPage: +1)
+        
+    }
+    
+    // MARK: - Methods
+    
+    func carregaFilmes() {
+        
+        viewModel.carregaImagens(self, collectionView: filmesCollectionView, valueToAddOnPage: 0)
+        
+    }
+}
+
+extension HomeViewController: UICollectionViewDataSource {
+    
     // MARK: - CollectionView data source
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return filmesToShow.count
+        return viewModel.filmesToShow.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let celulaFilme = collectionView.dequeueReusableCell(withReuseIdentifier: "celulaFilme", for: indexPath) as! FilmeCollectionViewCell
     
-        let filmeAtual = filmesToShow[indexPath.item]
+        let filmeAtual = viewModel.filmesToShow[indexPath.item]
         
         guard let imagem = filmeAtual.imagem else { return celulaFilme }
         
-        celulaFilme.imagemFilme.image = imagem   
+        celulaFilme.imagemFilme.image = imagem
         
         celulaFilme.tituloFilme.text = filmeAtual.nome
         
         return celulaFilme
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let filme = filmesToShow[indexPath.item]
+        let filme = viewModel.filmesToShow[indexPath.item]
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let controller = storyboard.instantiateViewController(withIdentifier: "detalhes") as! DetalhesFilmeViewController
         
         controller.filmeSelecionado = filme
-        controller.paginaAtual = paginaAtual
+        controller.paginaAtual = viewModel.paginaAtual
         
         self.present(controller, animated: true, completion: nil)
         
-    }
-    
-    // MARK: - IBActions
-
-    @IBAction func carregaPaginaAnterior(_ sender: UIButton) {
-        if(paginaAtual != 1) {
-            paginaAtual = paginaAtual - 1
-            
-            recuperaImages()
-        } else {
-            print("Voce esta na primeira página")
-        }
-    }
-   
-    @IBAction func botaoProximaPagina(_ sender: UIButton) {
-        carregamento.showSpinner(onView: self.view)
-        paginaAtual = paginaAtual + 1
-        
-        filmesAPI.getImagens(paginaAtual) { (filme, filmesArray ) in
-            
-            self.filmesToShow = filme
-            if(self.filmesToShow.count == filmesArray?.count ) {
-                self.filmesToShow.remove(at: 0)
-                self.filmesCollectionView.reloadData()
-                self.carregamento.removeSpinner()
-            }
-        }
-    }
-    
-    // MARK: - Methods
-    
-    func recuperaImages() {
-        
-        //animação de carregamento enquanto espera a requisição
-        carregamento.showSpinner(onView: self.view)
-        
-        filmesAPI.getImagens(paginaAtual) { (filme, filmesArray) in
-            self.filmesToShow = filme
-            if(self.filmesToShow.count == filmesArray?.count) {
-                self.filmesToShow.remove(at: 0)
-                self.carregamento.removeSpinner()
-                self.filmesCollectionView.reloadData()
-            }
-        }
     }
 }

@@ -60,15 +60,6 @@ class FilmesRequisition: NSObject {
   
                             let filmeAtual = Filme(nome: nomeAtual, id: id, caminho: caminhoAtual, sinopse: sinopseAtual, lancamento: dataDeLancamento, imagem: nil)
                             
-//                            filmeAtual = [
-//                                "id":id,
-//                                "nome":nomeAtual,
-//                                "caminho":caminhoAtual,
-//                                "sinopse":sinopseAtual,
-//                                "lancamento":dataDeLancamento
-//
-//                            ]
-                            
                             
                             filmesBruto.append(filmeAtual)
                         }
@@ -91,47 +82,31 @@ class FilmesRequisition: NSObject {
       
                 guard let url = URL(string: "https://image.tmdb.org/t/p/w500\(String(describing: filme.caminho))") else { return }
                     
-                    var filmeAtual:Filme? = nil
+                var filmeAtual:Filme? = nil
                     
-                    Alamofire.request(url, method: .get).responseImage(completionHandler: { (response) in
-                        switch response.result {
-                            case .success:
-                                
-                                if let image = response.result.value {
-                                    
-                                    filmeAtual = Filme(nome: filme.nome, id: filme.id,caminho: filme.caminho , sinopse: filme.sinopse, lancamento: filme.lancamento, imagem: image)
-                                 
-//                                    filmeAtual = [
-//                                        "nome":filme.nome,
-//                                        "imagem":image,
-//                                        "id":filme.id
-//                                    ]
-                                    
-                                    guard let `filmeAtual` = filmeAtual else { return }
-                                    
-                                    filmesProntos.append( filmeAtual)
-                                    completion(filmesProntos, filmes)
-                                }
-                                
-                                break
+                Alamofire.request(url, method: .get).responseImage(completionHandler: { (response) in
+                    switch response.result {
+                        case .success:
                             
-                            case .failure:
-                                print("Erro na requisição de imagens")
-                                break
-                        }
-                    })
+                            if let image = response.result.value {
+                                
+                                filmeAtual = Filme(nome: filme.nome, id: filme.id,caminho: filme.caminho , sinopse: filme.sinopse, lancamento: filme.lancamento, imagem: image)
+                      
+                                
+                                guard let `filmeAtual` = filmeAtual else { return }
+                                
+                                filmesProntos.append( filmeAtual)
+                                completion(filmesProntos, filmes)
+                            }
+                            
+                            break
+                        
+                        case .failure:
+                            print("Erro na requisição de imagens")
+                            break
+                    }
+                })
             }
-        }
-    }
-    func pegarDetalhesPelo(id:Int, pagina:Int,completion: @escaping(_ filme:[Filme]) -> Void)  {
-        getFilmes(pagina) { (filmes) in
-            
-            let filmeSelecionado = filmes.filter({ filmeAtual in
-
-                return filmeAtual.id == id
-                
-            })
-            completion(filmeSelecionado)
         }
     }
 }
