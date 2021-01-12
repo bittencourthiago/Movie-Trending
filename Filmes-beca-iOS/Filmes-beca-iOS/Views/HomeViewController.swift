@@ -24,10 +24,9 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
         super.viewDidLoad()
         filmesCollectionView.dataSource = self
         filmesCollectionView.delegate = self
-        
         self.setNeedsStatusBarAppearanceUpdate()
         
-        carregaFilmes()
+        carregaFilmes(pagina: 0)
     }
     
     // MARK: - StatusBar
@@ -39,29 +38,25 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
     // MARK: - IBActions
 
     @IBAction func carregaPaginaAnterior(_ sender: UIButton) {
-            
-        viewModel.carregaImagens(self, collectionView: filmesCollectionView, valueToAddOnPage: -1)
+        carregaFilmes(pagina: -1)
     }
    
     @IBAction func botaoProximaPagina(_ sender: UIButton) {
-        
-        viewModel.carregaImagens(self, collectionView: filmesCollectionView, valueToAddOnPage: +1)
-        
+        carregaFilmes(pagina: +1)
     }
     
     // MARK: - Methods
     
-    func carregaFilmes() {
-        
-        viewModel.carregaImagens(self, collectionView: filmesCollectionView, valueToAddOnPage: 0)
-        
+    func carregaFilmes(pagina:Int) {
+        viewModel.carregaImagens(self, collectionView: filmesCollectionView, valueToAddOnPage: pagina)
     }
 }
 
+// MARK: - CollectionView data source
+
 extension HomeViewController: UICollectionViewDataSource {
     
-    // MARK: - CollectionView data source
-    
+ 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.filmesToShow.count
     }
@@ -83,9 +78,8 @@ extension HomeViewController: UICollectionViewDataSource {
         let filme = viewModel.filmesToShow[indexPath.item]
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let controller = storyboard.instantiateViewController(withIdentifier: "detalhes") as! DetalhesFilmeViewController
-        
+    
         controller.filmeSelecionado = filme
-        controller.paginaAtual = viewModel.paginaAtual
         
         self.present(controller, animated: true, completion: nil)
         

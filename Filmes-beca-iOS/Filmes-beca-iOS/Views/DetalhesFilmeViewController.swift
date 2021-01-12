@@ -19,18 +19,15 @@ class DetalhesFilmeViewController: UIViewController {
     
     // MARK: - Variables
     
-    let filmesAPI = FilmesRequisition()
-    
-    var filmeSelecionado:Filme?
-    
-    var paginaAtual:Int = 1
+    let viewModel = DetalhesFilmeViewModel()
+    var filmeSelecionado:Filme? = nil
     
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        showFilme()
+        mostrar()
     }
     
     // MARK: - IBActions
@@ -41,19 +38,16 @@ class DetalhesFilmeViewController: UIViewController {
     
     // MARK: - Methods
     
-    func showFilme() {
-        
+    func mostrar() {
         guard let filme = filmeSelecionado else { return }
         
-        imagemFilme.image = filme.imagem
-        
-        tituloTextLabel.text = filme.nome
-        sinopseTextLabel.text = filme.sinopse
-        
-        let lancamentoArr:[String] = filme.lancamento.components(separatedBy: "-")
-        
-        let lancamentoLapidado = "\(lancamentoArr[2])/\(lancamentoArr[1])/\(lancamentoArr[0])"
-        
-        lancamentoTextLabel.text = lancamentoLapidado
+        viewModel.mostrarDetalhes(filme) { (filme) in
+            self.tituloTextLabel.text = filme.nome
+            self.imagemFilme.image = filme.imagem
+            self.sinopseTextLabel.text = filme.sinopse
+            self.lancamentoTextLabel.text = filme.lancamento
+        }
     }
+    
+    
 }
