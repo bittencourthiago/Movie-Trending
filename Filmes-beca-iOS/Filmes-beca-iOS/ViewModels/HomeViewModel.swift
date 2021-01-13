@@ -33,7 +33,9 @@ class HomeViewModel {
                 
                 if(self.filmesToShow.count == filmesArray?.count) {
                     self.filmesToShow.remove(at: 0)
+                    
                     self.homeViewData.value = HomeViewData(model: self.filmesToShow)
+                    
                     self.carregamento.removeSpinner()
                 }
             }

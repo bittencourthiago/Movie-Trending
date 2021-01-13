@@ -16,7 +16,9 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
     
     // MARK: - Variables
     
-    let viewModel = HomeViewModel()
+    let homeViewModel = HomeViewModel()
+    let celulaViewModel = FilmeCollectionCellViewModel()
+    
     var filmes:[Filme] = []
     
     // MARK: - Life Cycle
@@ -33,7 +35,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
     }
     
     func bind() {
-        viewModel.homeViewData.bind { (homeViewData) in
+        homeViewModel.homeViewData.bind { (homeViewData) in
             
             guard let `homeViewData` = homeViewData else { return }
             
@@ -62,7 +64,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
     // MARK: - Methods
     
     func carregaFilmes(pagina:Int) {
-        viewModel.carregaImagens(self, valueToAddOnPage: pagina)
+        homeViewModel.carregaImagens(self, valueToAddOnPage: pagina)
     }
 }
 
@@ -71,31 +73,21 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
 extension HomeViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.filmesToShow.count
+        return homeViewModel.filmesToShow.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let celulaFilme = collectionView.dequeueReusableCell(withReuseIdentifier: "celulaFilme", for: indexPath) as! FilmeCollectionViewCell
-    
-        let filmeAtual = viewModel.filmesToShow[indexPath.item]
         
-        guard let imagem = filmeAtual.imagem else { return celulaFilme }
-        
-        celulaFilme.imagemFilme.image = imagem
-        celulaFilme.tituloFilme.text = filmeAtual.nome
-        
-        return celulaFilme
+        return celulaViewModel.loadFilmes(indexPath, filmes: filmes,collection: collectionView)
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let filme = viewModel.filmesToShow[indexPath.item]
+        let filme = homeViewModel.filmesToShow[indexPath.item]
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let controller = storyboard.instantiateViewController(withIdentifier: "detalhes") as! DetalhesFilmeViewController
+   
+        controller.filmeSelecionado = filme
 
-        
-       controller.filmeSelecionado = filme
-//
         self.present(controller, animated: true, completion: nil)
         
     }
 }
-

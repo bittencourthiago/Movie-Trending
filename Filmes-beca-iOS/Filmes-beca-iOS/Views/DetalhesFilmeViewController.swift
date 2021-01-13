@@ -19,7 +19,6 @@ class DetalhesFilmeViewController: UIViewController {
     
     // MARK: - Variables
     
-    let viewModel = DetalhesFilmeViewModel()
     var filmeSelecionado:Filme? = nil
     
     // MARK: - Life Cycle
@@ -35,18 +34,19 @@ class DetalhesFilmeViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    // MARK: - Methods
 
 }
 
 extension DetalhesFilmeViewController: DetalhesFilmeViewModelDelegate {
     func reloadData() {
     
-        viewModel.getSelecionado(filmeSelecionado) { (filme) in
-            self.tituloTextLabel.text = filme.nome
-            self.imagemFilme.image = filme.imagem
-            self.sinopseTextLabel.text = filme.sinopse
-            self.lancamentoTextLabel.text = filme.lancamento
-        }
+        //pegar por return
+        guard let filme = filmeSelecionado else { return }
+       
+        tituloTextLabel.text = filme.nome
+        imagemFilme.image = filme.imagem
+        sinopseTextLabel.text = filme.sinopse
+        lancamentoTextLabel.text = filme.lancamento
+    
     }
 }

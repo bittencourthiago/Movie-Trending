@@ -17,15 +17,15 @@ class DetalhesFilmeViewModel {
     
     // MARK: - Variables
     
-    var viewData: DetalhesFilmeViewData? = nil
+    var viewData: DetalhesFilmeViewData
+    var filmeSelecionado:Filme? = nil
+    
+    init(_ filme:Filme) {
+        self.viewData = DetalhesFilmeViewData(model: filme)
+    }
     
     // MARK: - Methods
-    func getSelecionado(_ filme: Filme?, completion:@escaping(_ filme: DetalhesFilmeViewData)->Void) {
-        
-        guard let movie = filme else { return }
-        let filme = DetalhesFilmeViewData(model: movie)
-  
-        completion(filme)
+    func reloadData(_ filme: Filme) {
         
     }
     

@@ -14,3 +14,5 @@ class FilmeCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var tituloFilme: UILabel!
     
 }
+//criar viewModel c
+//loadMovies()
