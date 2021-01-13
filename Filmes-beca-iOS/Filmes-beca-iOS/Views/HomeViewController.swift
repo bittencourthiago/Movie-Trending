@@ -17,6 +17,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
     // MARK: - Variables
     
     let viewModel = HomeViewModel()
+    var filmes:[Filme] = []
     
     // MARK: - Life Cycle
     
@@ -26,7 +27,20 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
         filmesCollectionView.delegate = self
         self.setNeedsStatusBarAppearanceUpdate()
         
+        bind()
         carregaFilmes(pagina: 0)
+
+    }
+    
+    func bind() {
+        viewModel.homeViewData.bind { (homeViewData) in
+            
+            guard let `homeViewData` = homeViewData else { return }
+            
+            self.filmes = homeViewData.filmes
+            self.filmesCollectionView.reloadData()
+            
+        }
     }
     
     // MARK: - StatusBar
@@ -48,7 +62,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
     // MARK: - Methods
     
     func carregaFilmes(pagina:Int) {
-        viewModel.carregaImagens(self, collectionView: filmesCollectionView, valueToAddOnPage: pagina)
+        viewModel.carregaImagens(self, valueToAddOnPage: pagina)
     }
 }
 
@@ -56,7 +70,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
 
 extension HomeViewController: UICollectionViewDataSource {
     
- 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.filmesToShow.count
     }
@@ -69,7 +82,6 @@ extension HomeViewController: UICollectionViewDataSource {
         guard let imagem = filmeAtual.imagem else { return celulaFilme }
         
         celulaFilme.imagemFilme.image = imagem
-        
         celulaFilme.tituloFilme.text = filmeAtual.nome
         
         return celulaFilme
@@ -78,10 +90,12 @@ extension HomeViewController: UICollectionViewDataSource {
         let filme = viewModel.filmesToShow[indexPath.item]
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let controller = storyboard.instantiateViewController(withIdentifier: "detalhes") as! DetalhesFilmeViewController
-    
-        controller.filmeSelecionado = filme
+
         
+       controller.filmeSelecionado = filme
+//
         self.present(controller, animated: true, completion: nil)
         
     }
 }
+

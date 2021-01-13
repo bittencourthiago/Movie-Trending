@@ -59,8 +59,7 @@ class FilmesRequisition: NSObject {
                             guard let dataDeLancamento = filme[lancaOuEstreia] as? String else { return }
   
                             let filmeAtual = Filme(nome: nomeAtual, id: id, caminho: caminhoAtual, sinopse: sinopseAtual, lancamento: dataDeLancamento, imagem: nil)
-                            
-                            
+                                   
                             filmesBruto.append(filmeAtual)
                         }
                         completion(filmesBruto)

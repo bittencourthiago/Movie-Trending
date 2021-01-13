@@ -26,8 +26,7 @@ class DetalhesFilmeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        mostrar()
+        reloadData()
     }
     
     // MARK: - IBActions
@@ -37,17 +36,17 @@ class DetalhesFilmeViewController: UIViewController {
     }
     
     // MARK: - Methods
+
+}
+
+extension DetalhesFilmeViewController: DetalhesFilmeViewModelDelegate {
+    func reloadData() {
     
-    func mostrar() {
-        guard let filme = filmeSelecionado else { return }
-        
-        viewModel.mostrarDetalhes(filme) { (filme) in
+        viewModel.getSelecionado(filmeSelecionado) { (filme) in
             self.tituloTextLabel.text = filme.nome
             self.imagemFilme.image = filme.imagem
             self.sinopseTextLabel.text = filme.sinopse
             self.lancamentoTextLabel.text = filme.lancamento
         }
     }
-    
-    
 }

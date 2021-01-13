@@ -9,24 +9,32 @@
 import Foundation
 import UIKit
 
+protocol DetalhesFilmeViewModelDelegate {
+    func reloadData()
+}
+
 class DetalhesFilmeViewModel {
     
-    func mostrarDetalhes( _ filme:Filme? ,completion:@escaping(_ filme:Filme) -> Void) {
+    // MARK: - Variables
+    
+    var viewData: DetalhesFilmeViewData? = nil
+    
+    // MARK: - Methods
+    func getSelecionado(_ filme: Filme?, completion:@escaping(_ filme: DetalhesFilmeViewData)->Void) {
         
-        guard var `filme` = filme else { return }
-        
-        filme.lancamento = lapidaLancamento(filme.lancamento)
+        guard let movie = filme else { return }
+        let filme = DetalhesFilmeViewData(model: movie)
+  
         completion(filme)
         
     }
+    
     func lapidaLancamento(_ lancamento:String) -> String {
         
         let lancamentoArr:[String] = lancamento.components(separatedBy: "-")
-        
         let lancamentoLapidado = "\(lancamentoArr[2])/\(lancamentoArr[1])/\(lancamentoArr[0])"
         
         return lancamentoLapidado
         
     }
-    
 }
