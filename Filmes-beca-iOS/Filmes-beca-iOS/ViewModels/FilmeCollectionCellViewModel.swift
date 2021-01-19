@@ -25,6 +25,9 @@ class FilmeCollectionCellViewModel {
         celulaFilme.imagemFilme.image = imagem
         celulaFilme.tituloFilme.text = filmeAtual.nome
         
+        celulaFilme.imagemFilme.accessibilityTraits = .image
+        celulaFilme.imagemFilme.accessibilityTraits = .staticText
+        
         
         return celulaFilme
     }

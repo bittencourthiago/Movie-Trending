@@ -33,6 +33,18 @@ class DetalhesFilmeViewController: UIViewController {
     @IBAction func botaoVoltar(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
+    
+    // MARK: - Methods
+    
+    func configurarAcessibilidade() {
+
+        tituloTextLabel.accessibilityTraits = .header
+        imagemFilme.accessibilityTraits = .image
+        sinopseTextLabel.accessibilityTraits = .staticText
+        lancamentoTextLabel.accessibilityTraits = .staticText
+
+    }
+    
 }
 
 extension DetalhesFilmeViewController: DetalhesFilmeViewModelDelegate {
