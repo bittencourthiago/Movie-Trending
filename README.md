@@ -9,7 +9,7 @@
 <h3>Pods</h3>
 <code>
   pod 'Alamofire', '~> 4.7'
-</code>
+</code><br>
 <code>
   pod 'AlamofireImage', '~> 3.4.0'
 </code>
