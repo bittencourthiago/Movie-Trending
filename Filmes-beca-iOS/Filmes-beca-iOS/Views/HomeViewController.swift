@@ -55,15 +55,18 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
 
     @IBAction func carregaPaginaAnterior(_ sender: UIButton) {
         carregaFilmes(pagina: -1)
+        filmesCollectionView.contentOffset.y = 0
     }
    
     @IBAction func botaoProximaPagina(_ sender: UIButton) {
         carregaFilmes(pagina: +1)
+        filmesCollectionView.contentOffset.y = 0
     }
     
     // MARK: - Methods
     
     func carregaFilmes(pagina:Int) {
+        filmesCollectionView.contentOffset.y = 0
         homeViewModel.carregaImagens(self, valueToAddOnPage: pagina)
     }
 }
@@ -83,9 +86,11 @@ extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let filme = homeViewModel.filmesToShow[indexPath.item]
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let controller = storyboard.instantiateViewController(withIdentifier: "detalhes") as! DetalhesFilmeViewController
-   
-        controller.filmeSelecionado = filme
+        
+        let detalhesViewModel = DetalhesFilmeViewModel(filme)
+        
+        let controller = storyboard.instantiateViewController(withIdentifier: "detalhes") as! DetalhesFilmeViewController    
+        controller.detalhesViewModel = detalhesViewModel
 
         self.present(controller, animated: true, completion: nil)
         

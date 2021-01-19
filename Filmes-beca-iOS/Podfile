@@ -8,5 +8,7 @@ target 'Filmes-beca-iOS' do
   # Pods for Filmes-beca-iOS
   pod 'Alamofire', '~> 4.7'
   pod 'AlamofireImage', '~> 3.4.0'
+  
+  pod 'SwiftLint'
 
 end

@@ -24,6 +24,7 @@
 		F083F93525A7B8C4004A7B06 /* FilmesRequisition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F083F93425A7B8C4004A7B06 /* FilmesRequisition.swift */; };
 		F0F4744A25AF2FD700C29191 /* DetalhesFilmeViewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F4744925AF2FD700C29191 /* DetalhesFilmeViewData.swift */; };
 		F0F4745225AF6E5300C29191 /* FilmeCollectionCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F4745125AF6E5300C29191 /* FilmeCollectionCellViewModel.swift */; };
+		F0F8C85825B5F5FA00D2510B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0F8C85725B5F5FA00D2510B /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		F083F93425A7B8C4004A7B06 /* FilmesRequisition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmesRequisition.swift; sourceTree = "<group>"; };
 		F0F4744925AF2FD700C29191 /* DetalhesFilmeViewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetalhesFilmeViewData.swift; sourceTree = "<group>"; };
 		F0F4745125AF6E5300C29191 /* FilmeCollectionCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmeCollectionCellViewModel.swift; sourceTree = "<group>"; };
+		F0F8C85725B5F5FA00D2510B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F499E7B8EC50D41316034391 /* Pods-Filmes-beca-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Filmes-beca-iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-Filmes-beca-iOS/Pods-Filmes-beca-iOS.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -153,6 +155,7 @@
 				F08026AF25A737F300C41194 /* Views */,
 				F06ADFAE25ADCE3C0071C531 /* Resources */,
 				F08026A525A737DD00C41194 /* LaunchScreen.storyboard */,
+				F0F8C85725B5F5FA00D2510B /* Assets.xcassets */,
 			);
 			path = "Filmes-beca-iOS";
 			sourceTree = "<group>";
@@ -239,6 +242,7 @@
 			files = (
 				F08026A725A737DD00C41194 /* LaunchScreen.storyboard in Resources */,
 				F08026A425A737DD00C41194 /* Assets.xcassets in Resources */,
+				F0F8C85825B5F5FA00D2510B /* Assets.xcassets in Resources */,
 				F08026A225A737DA00C41194 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

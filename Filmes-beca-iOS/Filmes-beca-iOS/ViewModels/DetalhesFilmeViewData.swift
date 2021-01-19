@@ -24,8 +24,17 @@ class DetalhesFilmeViewData {
     init(model:Filme) {
         
         self.model = model
+        
+        
     }
-    
+    func lapidaLancamento(_ lancamento:String) -> String {
+        
+        let lancamentoArr:[String] = lancamento.components(separatedBy: "-")
+        let lancamentoLapidado = "\(lancamentoArr[2])/\(lancamentoArr[1])/\(lancamentoArr[0])"
+        
+        return lancamentoLapidado
+        
+    }
 }
 extension DetalhesFilmeViewData: DetalhesFilmeViewDataType {
     var caminho: String {
@@ -50,7 +59,7 @@ extension DetalhesFilmeViewData: DetalhesFilmeViewDataType {
     }
     
     var lancamento: String {
-        return model.lancamento
+        return lapidaLancamento(model.lancamento)
     }
     
     
